@@ -1,11 +1,12 @@
 package utils
 
 import (
+	"MailciousNodeProject/fraction"
 	"math"
 )
 
 //计算判断矩阵U, mi
-func CalculationMatrix(Si []int) ([][]float64, []float64) {
+func CalculationMatrix(Si []int64) ([][]float64, []float64) {
 	//判度矩阵U(不包括mi,wi)
 	var u [][]float64
 	var b float64
@@ -20,7 +21,9 @@ func CalculationMatrix(Si []int) ([][]float64, []float64) {
 				b = Tools(float64(Si[i] - Si[j] + 1))
 			} else {
 				//公式(2)
-				b =  Tools(float64(1/float64(Si[j]-Si[i]+1)))
+				//b =  Tools(float64(1/float64(Si[j]-Si[i]+1)))
+				tmp := Si[j]-Si[i]+1
+				ret := fraction.Model(1, tmp)
 			}
 			tmp *= b
 			a = append(a, b)

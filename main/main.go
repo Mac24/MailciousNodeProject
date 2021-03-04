@@ -37,22 +37,22 @@ const (
 //信任要素初始判断矩阵(大类)
  var U0 = [3][3]int{{1,2,2}, {0,1,2}, {0,0,1}}
 //权重(大类)
-var S0 = []int{5,3,1}
+var S0 = []int64{5,3,1}
 
 //第一小类，网络通信特性t1,U1,S1
 var t1 = []float64{FORWARD_INDEX, PROCESS_DELAY, DATA_TRABSMISSION_RATE, NUMBER_NEIGHBOR_NODES}
 var U1 = [4][4]int{{1,2,2,2}, {0,1,2,2}, {0,0,1,2}, {0,0,0,1}}
-var S1 = []int{7,5,3,1}
+var S1 = []int64{7,5,3,1}
 
 //第二小类,节点物理属性t2,U2,S2
 var t2 = []float64{RELATIVE_VELOCITY, RESIDUAL_ENERGY, SIGNAL_STRENGTH}
 var U2 = [3][3]int{{1,2,2}, {0,1,2}, {0,0,1}}
-var S2 = []int{5,3,1}
+var S2 = []int64{5,3,1}
 
 //第三小类,应用数据相关t3,U3,S3
 var t3 = []float64{DATA_AVAILABILITY, DATA_ACCURACY}
 var U3 = [2][2]int{{1,2},{0,1}}
-var S3 = []int{3,1}
+var S3 = []int64{3,1}
 
 func main() {
 	var count int
