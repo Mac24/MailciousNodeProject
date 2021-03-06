@@ -67,3 +67,8 @@ func (s *FAL) Mul(f FAL) *FAL { // 乘法
 	s.offset()
 	return s
 }
+
+// Verdict Calculation results
+func (s *FAL) Verdict() float64 { // 计算结果
+	return float64(s.Nume) / float64(s.Deno)
+}

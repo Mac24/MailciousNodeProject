@@ -6,48 +6,67 @@ import (
 )
 
 //计算判断矩阵U, mi
-func CalculationMatrix(Si []int64) ([][]float64, []float64) {
+func CalculationMatrix(Si []int64) (interface{}, []fraction.FAL) {
 	//判度矩阵U(不包括mi,wi)
-	var u [][]float64
-	var b float64
+	var u [][]interface{}
 	//判断矩阵中的mi
-	var mi []float64
+	var mi []fraction.FAL
 	for i:=0; i < len(Si); i++ {
-		var a []float64
-		var tmp = 1.0
+		var ret fraction.FAL
+		var tmp_mul *fraction.FAL
+		var a []interface{}
+		var tmp int64
+		fValue := fraction.Model(1)
 		for j:=0; j < len(Si); j++{
+			ret_mul := fraction.Model(1)
 			if Si[i] >= Si[j]{
 				//公式(1)
-				b = Tools(float64(Si[i] - Si[j] + 1))
+				tmp = (Si[i] - Si[j] + 1)
+				ret = fraction.Model(tmp)
 			} else {
 				//公式(2)
 				//b =  Tools(float64(1/float64(Si[j]-Si[i]+1)))
-				tmp := Si[j]-Si[i]+1
-				ret := fraction.Model(1, tmp)
+				tmp = Si[j]-Si[i]+1
+				ret = fraction.Model(1, tmp)
 			}
-			tmp *= b
-			a = append(a, b)
+			tmp_mul = fValue.Mul(ret)
+			//fmt.Println("tmp_mul:", tmp_mul, "ret:", ret)
+			ret_mul = *ret_mul.Mul(*tmp_mul)
+			//fmt.Println("ret_mul:", ret_mul)
+			if ret.Deno == 1 {
+				a = append(a, ret.Verdict())
+			} else {
+				a = append(a, ret)
+			}
+
 		}
+		mi = append(mi, *tmp_mul)
+		//fmt.Println("mi:", mi)
 		u = append(u, a)
-		mi = append(mi, tmp)
 	}
 	return u, mi
 }
 
 //计算判断矩阵中的权重wi
-func CalculationWeight(Mi []float64) [][]float64 {
+func CalculationWeight(Mi []fraction.FAL) [][]float64 {
+	//fmt.Println("Mi:", Mi)
 	var ci, sum float64
 	//判断矩阵中的wi
-	var wi []float64
+	var wi, tmp_ci []float64
 	var w [][]float64
 
 	for _, v := range Mi {
-		var weight float64
 		//计算ci
-		ci = math.Pow(v, 1/float64(len(Mi)))
+		tmp_v := v.Verdict()
+		ci = math.Pow(tmp_v, 1.0/float64(len(Mi)))
 		sum += ci
+		//fmt.Println("tmp_v:", tmp_v,"len(Mi):", len(Mi), "ci:",ci, "float64(1/len(Mi)):", 1.0/float64(len(Mi)), "sum:",sum)
+		tmp_ci = append(tmp_ci, ci)
+	}
+	for _, v := range tmp_ci {
+		var weight float64
 		//计算wi
-		weight = Tools(ci / sum)
+		weight = (v / sum)
 		wi = append(wi, weight)
 	}
 	w = append(w, wi)
